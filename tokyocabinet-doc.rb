@@ -18,7 +18,7 @@
 module TokyoCabinet
   # the version information
   VERSION = "x.y.z"
-  # Hash database is a file containing a hash table and is handled with the hash database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the hash database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.%%
+  # Hash database is a file containing a hash table and is handled with the hash database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the hash database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.  It is forbidden for multible database objects in a process to open the same database at the same time.%%
   # Except for the interface below, methods compatible with the `Hash' class are also provided; `[]', `[]=', `store', `delete', `fetch', `has_key?', `has_value?', `key', `clear', `size', `empty?', `each', `each_key', `each_value', and `keys'.%%
   class HDB
     # error code: success
@@ -131,6 +131,13 @@ module TokyoCabinet
     def setxmsiz(xmsiz)
       # (native code)
     end
+    # Set the unit step number of auto defragmentation.%%
+    # `<i>dfunit</i>' specifie the unit step number.  If it is not more than 0, the auto defragmentation is disabled.  It is disabled by default.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Note that the defragmentation parameters should be set before the database is opened.%%
+    def setdfunit(dfunit)
+      # (native code)
+    end
     # Open a database file.%%
     # `<i>path</i>' specifies the path of the database file.%%
     # `<i>omode</i>' specifies the connection mode: `TokyoCabinet::HDB::OWRITER' as a writer, `TokyoCabinet::HDB::OREADER' as a reader.  If the mode is `TokyoCabinet::HDB::OWRITER', the following may be added by bitwise-or: `TokyoCabinet::HDB::OCREAT', which means it creates a new database if not exist, `TokyoCabinet::HDB::OTRUNC', which means it creates a new database regardless if one exists, `TokyoCabinet::HDB::OTSYNC', which means every transaction synchronizes updated contents with the device.  Both of `TokyoCabinet::HDB::OREADER' and `TokyoCabinet::HDB::OWRITER' can be added to by bitwise-or: `TokyoCabinet::HDB::ONOLCK', which means it opens the database file without file locking, or `TokyoCabinet::HDB::OLCKNB', which means locking is performed without blocking.  If it is not defined, `TokyoCabinet::HDB::OREADER' is specified.%%
@@ -209,8 +216,8 @@ module TokyoCabinet
     # Get forward matching keys.%%
     # `<i>prefix</i>' specifies the prefix of the corresponding keys.%%
     # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
-    # The return value is a list object of the keys of the corresponding records.  This method does never fail and return an empty list even if no record corresponds.%%
-    # Note that this function may be very slow because every key in the database is scanned.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
+    # Note that this method may be very slow because every key in the database is scanned.%%
     def fwmkeys(prefix, max)
       # (native code)
     end
@@ -292,7 +299,7 @@ module TokyoCabinet
       # (native code)
     end
   end
-  # B+ tree database is a file containing a B+ tree and is handled with the B+ tree database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the B+ tree database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.%%
+  # B+ tree database is a file containing a B+ tree and is handled with the B+ tree database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the B+ tree database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.  It is forbidden for multible database objects in a process to open the same database at the same time.%%
   # Except for the interface below, methods compatible with the `Hash' class are also provided; `[]', `[]=', `store', `delete', `fetch', `has_key?', `has_value?', `key', `clear', `size', `empty?', `each', `each_key', `each_value', and `keys'.%%
   class BDB
     # error code: success
@@ -423,6 +430,13 @@ module TokyoCabinet
     def setxmsiz(xmsiz)
       # (native code)
     end
+    # Set the unit step number of auto defragmentation.%%
+    # `<i>dfunit</i>' specifie the unit step number.  If it is not more than 0, the auto defragmentation is disabled.  It is disabled by default.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Note that the defragmentation parameters should be set before the database is opened.%%
+    def setdfunit(dfunit)
+      # (native code)
+    end
     # Open a database file.%%
     # `<i>path</i>' specifies the path of the database file.%%
     # `<i>omode</i>' specifies the connection mode: `TokyoCabinet::BDB::OWRITER' as a writer, `TokyoCabinet::BDB::OREADER' as a reader.  If the mode is `TokyoCabinet::BDB::OWRITER', the following may be added by bitwise-or: `TokyoCabinet::BDB::OCREAT', which means it creates a new database if not exist, `TokyoCabinet::BDB::OTRUNC', which means it creates a new database regardless if one exists, `TokyoCabinet::BDB::OTSYNC', which means every transaction synchronizes updated contents with the device.  Both of `TokyoCabinet::BDB::OREADER' and `TokyoCabinet::BDB::OWRITER' can be added to by bitwise-or: `TokyoCabinet::BDB::ONOLCK', which means it opens the database file without file locking, or `TokyoCabinet::BDB::OLCKNB', which means locking is performed without blocking.  If it is not defined, `TokyoCabinet::BDB::OREADER' is specified.%%
@@ -522,14 +536,14 @@ module TokyoCabinet
     # `<i>ekey</i>' specifies the key of the ending border.  If it is not defined, the last record is specified.%%
     # `<i>einc</i>' specifies whether the ending border is inclusive or not.  If it is not defined, false is specified.%%
     # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
-    # The return value is a list object of the keys of the corresponding records.  This method does never fail and return an empty list even if no record corresponds.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
     def range(bkey, binc, ekey, einc, max)
       # (native code)
     end
     # Get forward matching keys.%%
     # `<i>prefix</i>' specifies the prefix of the corresponding keys.%%
     # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
-    # The return value is a list object of the keys of the corresponding records.  This method does never fail and return an empty list even if no record corresponds.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
     def fwmkeys(prefix, max)
       # (native code)
     end
@@ -680,7 +694,7 @@ module TokyoCabinet
       # (native code)
     end
   end
-  # Fixed-Length database is a file containing a fixed-length table and is handled with the fixed-length database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the fixed-length database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.%%
+  # Fixed-Length database is a file containing a fixed-length table and is handled with the fixed-length database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the fixed-length database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.  It is forbidden for multible database objects in a process to open the same database at the same time.%%
   # Except for the interface below, methods compatible with the `Hash' class are also provided; `[]', `[]=', `store', `delete', `fetch', `has_key?', `has_value?', `key', `clear', `size', `empty?', `each', `each_key', `each_value', and `keys'.%%
   class FDB
     # error code: success
@@ -830,14 +844,14 @@ module TokyoCabinet
     end
     # Get the next key of the iterator.%%
     # If successful, the return value is the next key, else, it is `nil'.  `nil' is returned when no record is to be get out of the iterator.%%
-    # It is possible to access every record by iteration of calling this function.  It is allowed to update or remove records whose keys are fetched while the iteration.  The order of this traversal access method is ascending of the ID number.%%
+    # It is possible to access every record by iteration of calling this method.  It is allowed to update or remove records whose keys are fetched while the iteration.  The order of this traversal access method is ascending of the ID number.%%
     def iternext()
       # (native code)
     end
     # Get keys with an interval notation.%%
     # `<i>interval</i>' specifies the interval notation.%%
     # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
-    # The return value is a list object of the keys of the corresponding records.  This method does never fail and return an empty list even if no record corresponds.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
     def range(interval, max)
       # (native code)
     end
@@ -882,6 +896,24 @@ module TokyoCabinet
     def copy(path)
       # (native code)
     end
+    # Begin the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # The database is locked by the thread while the transaction so that only one transaction can be activated with a database object at the same time.  Thus, the serializable isolation level is assumed if every database operation is performed in the transaction.  All updated regions are kept track of by write ahead logging while the transaction.  If the database is closed during transaction, the transaction is aborted implicitly.%%
+    def tranbegin()
+      # (native code)
+    end
+    # Commit the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Update in the transaction is fixed when it is committed successfully.%%
+    def trancommit()
+      # (native code)
+    end
+    # Abort the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Update in the transaction is discarded when it is aborted.  The state of the database is rollbacked to before transaction.%%
+    def tranabort()
+      # (native code)
+    end
     # Get the path of the database file.%%
     # The return value is the path of the database file or `nil' if the object does not connect to any database file.%%
     def path()
@@ -898,7 +930,7 @@ module TokyoCabinet
       # (native code)
     end
   end
-  # Table database is a file containing records composed of the primary keys and arbitrary columns and is handled with the table database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the table database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.%%
+  # Table database is a file containing records composed of the primary keys and arbitrary columns and is handled with the table database API.  Before operations to store or retrieve records, it is necessary to open a database file and connect the table database object to it.  To avoid data missing or corruption, it is important to close every database file when it is no longer in use.  It is forbidden for multible database objects in a process to open the same database at the same time.%%
   # Except for the interface below, methods compatible with the `Hash' class are also provided; `[]', `[]=', `store', `delete', `fetch', `has_key?', `clear', `size', `empty?', `each', `each_key', `each_value', and `keys'.%%
   class TDB
     # error code: success
@@ -975,6 +1007,10 @@ module TokyoCabinet
     ITLEXICAL = 0
     # index type: decimal string
     ITDECIMAL = 1
+    # index type: token inverted index
+    ITTOKEN = 2
+    # index type: q-gram inverted index
+    ITQGRAM = 3
     # index type: optimize
     ITOPT = 9998
     # index type: void
@@ -1021,6 +1057,13 @@ module TokyoCabinet
     # If successful, the return value is true, else, it is false.%%
     # Note that the mapping parameters should be set before the database is opened.%%
     def setxmsiz(xmsiz)
+      # (native code)
+    end
+    # Set the unit step number of auto defragmentation.%%
+    # `<i>dfunit</i>' specifie the unit step number.  If it is not more than 0, the auto defragmentation is disabled.  It is disabled by default.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Note that the defragmentation parameters should be set before the database is opened.%%
+    def setdfunit(dfunit)
       # (native code)
     end
     # Open a database file.%%
@@ -1093,8 +1136,8 @@ module TokyoCabinet
     # Get forward matching primary keys.%%
     # `<i>prefix</i>' specifies the prefix of the corresponding keys.%%
     # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
-    # The return value is a list object of the keys of the corresponding records.  This method does never fail and return an empty list even if no record corresponds.%%
-    # Note that this function may be very slow because every key in the database is scanned.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
+    # Note that this method may be very slow because every key in the database is scanned.%%
     def fwmkeys(prefix, max)
       # (native code)
     end
@@ -1102,7 +1145,7 @@ module TokyoCabinet
     # `<i>pkey</i>' specifies the primary key.%%
     # `<i>num</i>' specifies the additional value.%%
     # If successful, the return value is the summation value, else, it is `nil'.%%
-    # If the corresponding record exists, the value is treated as an integer and is added to.  If no record corresponds, a new record of the additional value is stored.  Because records are stored in binary format, they should be processed with the `unpack' method with the `i' operator after retrieval.%%
+    # The additional value is stored as a decimal string value of a column whose name is "_num".  If no record corresponds, a new record with the additional value is stored.%%
     def addint(pkey, num)
       # (native code)
     end
@@ -1110,7 +1153,7 @@ module TokyoCabinet
     # `<i>key</i>' specifies the primary key.%%
     # `<i>num</i>' specifies the additional value.%%
     # If successful, the return value is the summation value, else, it is `nil'.%%
-    # If the corresponding record exists, the value is treated as a real number and is added to.  If no record corresponds, a new record of the additional value is stored.  Because records are stored in binary format, they should be processed with the `unpack' method with the `d' operator after retrieval.%%
+    # The additional value is stored as a decimal string value of a column whose name is "_num".  If no record corresponds, a new record with the additional value is stored.%%
     def adddouble(pkey, num)
       # (native code)
     end
@@ -1177,8 +1220,8 @@ module TokyoCabinet
     end
     # Set a column index.%%
     # `<i>name</i>' specifies the name of a column.  If the name of an existing index is specified, the index is rebuilt.  An empty string means the primary key.%%
-    # `<i>type</i>' specifies the index type: `TokyoCabinet::TDB::ITLEXICAL' for lexical string, `TokyoCabinet::TDB::ITDECIMAL' for decimal string.  If it is `TokyoCabinet::TDB::ITOPT', the index is optimized.  If it is `TokyoCabinet::TDB::ITVOID', the index is removed.  If `TokyoCabinet::TDB::ITKEEP' is added by bitwise-or and the index exists, this method merely returns failure.%%
-# If successful, the return value is true, else, it is false.%%
+    # `<i>type</i>' specifies the index type: `TokyoCabinet::TDB::ITLEXICAL' for lexical string, `TokyoCabinet::TDB::ITDECIMAL' for decimal string, `TokyoCabinet::TDB::ITTOKEN' for token inverted index, `TokyoCabinet::TDB::ITQGRAM' for q-gram inverted index.  If it is `TokyoCabinet::TDB::ITOPT', the index is optimized.  If it is `TokyoCabinet::TDB::ITVOID', the index is removed.  If `TokyoCabinet::TDB::ITKEEP' is added by bitwise-or and the index exists, this method merely returns failure.%%
+    # If successful, the return value is true, else, it is false.%%
     def setindex(name, type)
       # (native code)
     end
@@ -1191,35 +1234,43 @@ module TokyoCabinet
   # Query is a mechanism to search for and retrieve records corresponding conditions from table database.%%
   class TDBQRY
     # query condition: string is equal to
-    QCSTREQ = 1
+    QCSTREQ = 0
     # query condition: string is included in
-    QCSTRINC = 2
+    QCSTRINC = 1
     # query condition: string begins with
-    QCSTRBW = 3
+    QCSTRBW = 2
     # query condition: string ends with
-    QCSTREW = 4
+    QCSTREW = 3
     # query condition: string includes all tokens in
-    QCSTRAND = 5
+    QCSTRAND = 4
     # query condition: string includes at least one token in
-    QCSTROR = 6
+    QCSTROR = 5
     # query condition: string is equal to at least one token in
-    QCSTROREQ = 7
+    QCSTROREQ = 6
     # query condition: string matches regular expressions of
-    QCSTRRX = 8
+    QCSTRRX = 7
     # query condition: number is equal to
-    QCNUMEQ = 9
+    QCNUMEQ = 8
     # query condition: number is greater than
-    QCNUMGT = 10
+    QCNUMGT = 9
     # query condition: number is greater than or equal to
-    QCNUMGE = 11
+    QCNUMGE = 10
     # query condition: number is less than
-    QCNUMLT = 12
+    QCNUMLT = 11
     # query condition: number is less than or equal to
-    QCNUMLE = 13
+    QCNUMLE = 12
     # query condition: number is between two tokens of
-    QCNUMBT = 14
+    QCNUMBT = 13
     # query condition: number is equal to at least one token in
-    QCNUMOREQ = 15
+    QCNUMOREQ = 14
+    # query condition: full-text search with the phrase of
+    QCFTSPH = 15
+    # query condition: full-text search with all tokens in
+    QCFTSAND = 16
+    # query condition: full-text search with at least one token in
+    QCFTSOR = 17
+    # query condition: full-text search with the compound expression of
+    QCFTSEX = 18
     # query condition: negation flag
     QCNEGATE = 1 << 24
     # query condition: no index flag
@@ -1238,6 +1289,22 @@ module TokyoCabinet
     QPOUT = 1 << 1
     # post treatment: stop the iteration
     QPSTOP = 1 << 24
+    # set operation type: union
+    MSUNION = 0
+    # set operation type: intersection
+    MSISECT = 1
+    # set operation type: difference
+    MSDIFF = 2
+    # KWIC option: mark up by tabs
+    KWMUTAB = 1 << 0
+    # KWIC option: mark up by control characters
+    KWMUCTRL = 1 << 1
+    # KWIC option: mark up by square brackets
+    KWMUBRCT = 1 << 2
+    # KWIC option: do not overlap
+    KWNOOVER = 1 << 24
+    # KWIC option: pick up the lead string
+    KWPULEAD = 1 << 25
     # Create a query object.%%
     # `<i>tdb</i>' specifies the table database object.%%
     # The return value is the new query object.%%
@@ -1246,7 +1313,7 @@ module TokyoCabinet
     end
     # Add a narrowing condition.%%
     # `<i>name</i>' specifies the name of a column.  An empty string means the primary key.%%
-    # `<i>op</i>' specifies an operation type: `TokyoCabinet::TDBQRY::QCSTREQ' for string which is equal to the expression, `TokyoCabinet::TDBQRY::QCSTRINC' for string which is included in the expression, `TokyoCabinet::TDBQRY::QCSTRBW' for string which begins with the expression, `TokyoCabinet::TDBQRY::QCSTREW' for string which ends with the expression, `TokyoCabinet::TDBQRY::QCSTRAND' for string which includes all tokens in the expression, `TokyoCabinet::TDBQRY::QCSTROR' for string which includes at least one token in the expression, `TokyoCabinet::TDBQRY::QCSTROREQ' for string which is equal to at least one token in the expression, `TokyoCabinet::TDBQRY::QCSTRRX' for string which matches regular expressions of the expression, `TokyoCabinet::TDBQRY::QCNUMEQ' for number which is equal to the expression, `TokyoCabinet::TDBQRY::QCNUMGT' for number which is greater than the expression, `TokyoCabinet::TDBQRY::QCNUMGE' for number which is greater than or equal to the expression, `TokyoCabinet::TDBQRY::QCNUMLT' for number which is less than the expression, `TokyoCabinet::TDBQRY::QCNUMLE' for number which is less than or equal to the expression, `TokyoCabinet::TDBQRY::QCNUMBT' for number which is between two tokens of the expression, `TokyoCabinet::TDBQRY::QCNUMOREQ' for number which is equal to at least one token in the expression.  All operations can be flagged by bitwise-or: `TokyoCabinet::TDBQRY::QCNEGATE' for negation, `TokyoCabinet::TDBQRY::QCNOIDX' for using no index.%%
+    # `<i>op</i>' specifies an operation type: `TokyoCabinet::TDBQRY::QCSTREQ' for string which is equal to the expression, `TokyoCabinet::TDBQRY::QCSTRINC' for string which is included in the expression, `TokyoCabinet::TDBQRY::QCSTRBW' for string which begins with the expression, `TokyoCabinet::TDBQRY::QCSTREW' for string which ends with the expression, `TokyoCabinet::TDBQRY::QCSTRAND' for string which includes all tokens in the expression, `TokyoCabinet::TDBQRY::QCSTROR' for string which includes at least one token in the expression, `TokyoCabinet::TDBQRY::QCSTROREQ' for string which is equal to at least one token in the expression, `TokyoCabinet::TDBQRY::QCSTRRX' for string which matches regular expressions of the expression, `TokyoCabinet::TDBQRY::QCNUMEQ' for number which is equal to the expression, `TokyoCabinet::TDBQRY::QCNUMGT' for number which is greater than the expression, `TokyoCabinet::TDBQRY::QCNUMGE' for number which is greater than or equal to the expression, `TokyoCabinet::TDBQRY::QCNUMLT' for number which is less than the expression, `TokyoCabinet::TDBQRY::QCNUMLE' for number which is less than or equal to the expression, `TokyoCabinet::TDBQRY::QCNUMBT' for number which is between two tokens of the expression, `TokyoCabinet::TDBQRY::QCNUMOREQ' for number which is equal to at least one token in the expression, `TokyoCabinet::TDBQRY::QCFTSPH' for full-text search with the phrase of the expression, `TokyoCabinet::TDBQRY::QCFTSAND' for full-text search with all tokens in the expression, `TokyoCabinet::TDBQRY::QCFTSOR' for full-text search with at least one token in the expression, `TokyoCabinet::TDBQRY::QCFTSEX' for full-text search with the compound expression.  All operations can be flagged by bitwise-or: `TokyoCabinet::TDBQRY::QCNEGATE' for negation, `TokyoCabinet::TDBQRY::QCNOIDX' for using no index.%%
     # `<i>expr</i>' specifies an operand exression.%%
     # The return value is always `nil'.%%
     def addcond(name, op, expr)
@@ -1254,7 +1321,7 @@ module TokyoCabinet
     end
     # Set the order of the result.%%
     # `<i>name</i>' specifies the name of a column.  An empty string means the primary key.%%
-    # `<i>type</i>' specifies the order type: `TokyoCabinet::TDBQRY::QOSTRASC' for string ascending, `TokyoCabinet::TDBQRY::QOSTRDESC' for string descending, `TokyoCabinet::TDBQRY::QONUMASC' for number ascending, `TokyoCabinet::TDBQRY::QONUMDESC' for number descending.%%
+    # `<i>type</i>' specifies the order type: `TokyoCabinet::TDBQRY::QOSTRASC' for string ascending, `TokyoCabinet::TDBQRY::QOSTRDESC' for string descending, `TokyoCabinet::TDBQRY::QONUMASC' for number ascending, `TokyoCabinet::TDBQRY::QONUMDESC' for number descending.  If it is not defined, `TokyoCabinet::TDBQRY::QOSTRASC' is specified.%%
     # The return value is always `nil'.%%
     def setorder(name, type)
       # (native code)
@@ -1267,7 +1334,7 @@ module TokyoCabinet
       # (native code)
     end
     # Execute the search.%%
-    # The return value is an array of the primary keys of the corresponding records.  This method does never fail and return an empty array even if no record corresponds.%%
+    # The return value is an array of the primary keys of the corresponding records.  This method does never fail.  It returns an empty array even if no record corresponds.%%
     def search()
       # (native code)
     end
@@ -1277,7 +1344,7 @@ module TokyoCabinet
       # (native code)
     end
     # Process each corresponding record.%%
-    # This function needs a block parameter of the iterator called for each record.  The block receives two parameters.  The first parameter is the primary key.  The second parameter is a hash containing columns.  It returns flags of the post treatment by bitwise-or: `TokyoCabinet::TDBQRY::QPPUT' to modify the record, `TokyoCabinet::TDBQRY::QPOUT' to remove the record, `TokyoCabinet::TDBQRY::QPSTOP' to stop the iteration.%%
+    # This method needs a block parameter of the iterator called for each record.  The block receives two parameters.  The first parameter is the primary key.  The second parameter is a hash containing columns.  It returns flags of the post treatment by bitwise-or: `TokyoCabinet::TDBQRY::QPPUT' to modify the record, `TokyoCabinet::TDBQRY::QPOUT' to remove the record, `TokyoCabinet::TDBQRY::QPSTOP' to stop the iteration.%%
     # If successful, the return value is true, else, it is false.%%
     def proc()
       # (native code)
@@ -1285,6 +1352,187 @@ module TokyoCabinet
     # Get the hint of a query object.%%
     # The return value is the hint string.%%
     def hint()
+      # (native code)
+    end
+    # Retrieve records with multiple query objects and get the set of the result.%%
+    # `<i>others</i>' specifies an array of the query objects except for the self object.%%
+    # `<i>type</i>' specifies a set operation type: `TokyoCabinet::TDBQRY::MSUNION' for the union set, `TokyoCabinet::TDBQRY::MSISECT' for the intersection set, `TokyoCabinet::TDBQRY::MSDIFF' for the difference set.  If it is not defined, `TokyoCabinet::TDBQRY::MSUNION' is specified.%%
+    # The return value is an array of the primary keys of the corresponding records.  This method does never fail.  It returns an empty array even if no record corresponds.%%
+    # If the first query object has the order setting, the result array is sorted by the order.%%
+    def metasearch(others, type)
+      # (native code)
+    end
+    # Generate keyword-in-context strings.%%
+    # `<i>cols</i>' specifies a hash containing columns.%%
+    # `<i>name</i>' specifies the name of a column.  If it is not defined, the first column of the query is specified.%%
+    # `<i>width</i>' specifies the width of strings picked up around each keyword.  If it is not defined or negative, the whole text is picked up.%%
+    # `<i>opts</i>' specifies options by bitwise-or: `TokyoCabinet::TDBQRY::KWMUTAB' specifies that each keyword is marked up between two tab characters, `TokyoCabinet::TDBQRY::KWMUCTRL' specifies that each keyword is marked up by the STX (0x02) code and the ETX (0x03) code, `TokyoCabinet::TDBQRY::KWMUBRCT' specifies that each keyword is marked up by the two square brackets, `TokyoCabinet::TDBQRY::KWNOOVER' specifies that each context does not overlap, `TokyoCabinet::TDBQRY::KWPULEAD' specifies that the lead string is picked up forcibly.  If it is not defined, no option is specified.%%
+    # The return value is an array of strings around keywords.%%
+    def kwic(cols, name, width, opts)
+      # (native code)
+    end
+  end
+  # Abstract database is a set of interfaces to use on-memory hash database, on-memory tree database, hash database, B+ tree database, fixed-length database, and table database with the same API.  Before operations to store or retrieve records, it is necessary to connect the abstract database object to the concrete one.  The method `open' is used to open a concrete database and the method `close' is used to close the database.  To avoid data missing or corruption, it is important to close every database instance when it is no longer in use.  It is forbidden for multible database objects in a process to open the same database at the same time.%%
+  # Except for the interface below, methods compatible with the `Hash' class are also provided; `[]', `[]=', `store', `delete', `fetch', `has_key?', `has_value?', `key', `clear', `size', `empty?', `each', `each_key', `each_value', and `keys'.%%
+  class ADB
+    # Create an abstract database object.%%
+    # The return value is the new abstract database object.%%
+    def initialize()
+      # (native code)
+    end
+    # Open a database.%%
+    # `<i>name</i>' specifies the name of the database.  If it is "*", the database will be an on-memory hash database.  If it is "+", the database will be an on-memory tree database.  If its suffix is ".tch", the database will be a hash database.  If its suffix is ".tcb", the database will be a B+ tree database.  If its suffix is ".tcf", the database will be a fixed-length database.  If its suffix is ".tct", the database will be a table database.  Otherwise, this method fails.  Tuning parameters can trail the name, separated by "#".  Each parameter is composed of the name and the value, separated by "=".  On-memory hash database supports "bnum", "capnum", and "capsiz".  On-memory tree database supports "capnum" and "capsiz".  Hash database supports "mode", "bnum", "apow", "fpow", "opts", "rcnum", and "xmsiz".  B+ tree database supports "mode", "lmemb", "nmemb", "bnum", "apow", "fpow", "opts", "lcnum", "ncnum", and "xmsiz".  Fixed-length database supports "mode", "width", and "limsiz".  Table database supports "mode", "bnum", "apow", "fpow", "opts", "rcnum", "lcnum", "ncnum", "xmsiz", and "idx".%%
+    # If successful, the return value is true, else, it is false.%%
+    # The tuning parameter "capnum" specifies the capacity number of records.  "capsiz" specifies the capacity size of using memory.  Records spilled the capacity are removed by the storing order.  "mode" can contain "w" of writer, "r" of reader, "c" of creating, "t" of truncating, "e" of no locking, and "f" of non-blocking lock.  The default mode is relevant to "wc".  "opts" can contains "l" of large option, "d" of Deflate option, "b" of BZIP2 option, and "t" of TCBS option.  "idx" specifies the column name of an index and its type separated by ":".  For example, "casket.tch#bnum=1000000#opts=ld" means that the name of the database file is "casket.tch", and the bucket number is 1000000, and the options are large and Deflate.%%
+    def open(name)
+      # (native code)
+    end
+    # Close the database.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Update of a database is assured to be written when the database is closed.  If a writer opens a database but does not close it appropriately, the database will be broken.%%
+    def close()
+      # (native code)
+    end
+    # Store a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # `<i>value</i>' specifies the value.%%
+    # If successful, the return value is true, else, it is false.%%
+    # If a record with the same key exists in the database, it is overwritten.%%
+    def put(key, value)
+      # (native code)
+    end
+    # Store a new record.%%
+    # `<i>key</i>' specifies the key.%%
+    # `<i>value</i>' specifies the value.%%
+    # If successful, the return value is true, else, it is false.%%
+    # If a record with the same key exists in the database, this method has no effect.%%
+    def putkeep(key, value)
+      # (native code)
+    end
+    # Concatenate a value at the end of the existing record.%%
+    # `<i>key</i>' specifies the key.%%
+    # `<i>value</i>' specifies the value.%%
+    # If successful, the return value is true, else, it is false.%%
+    # If there is no corresponding record, a new record is created.%%
+    def putcat(key, value)
+      # (native code)
+    end
+    # Remove a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # If successful, the return value is true, else, it is false.%%
+    def out(key)
+      # (native code)
+    end
+    # Retrieve a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # If successful, the return value is the value of the corresponding record.  `nil' is returned if no record corresponds.%%
+    def get(key)
+      # (native code)
+    end
+    # Get the size of the value of a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # If successful, the return value is the size of the value of the corresponding record, else, it is -1.%%
+    def vsiz(key)
+      # (native code)
+    end
+    # Initialize the iterator.%%
+    # If successful, the return value is true, else, it is false.%%
+    # The iterator is used in order to access the key of every record stored in a database.%%
+    def iterinit()
+      # (native code)
+    end
+    # Get the next key of the iterator.%%
+    # If successful, the return value is the next key, else, it is `nil'.  `nil' is returned when no record is to be get out of the iterator.%%
+    # It is possible to access every record by iteration of calling this method.  It is allowed to update or remove records whose keys are fetched while the iteration.  However, it is not assured if updating the database is occurred while the iteration.  Besides, the order of this traversal access method is arbitrary, so it is not assured that the order of storing matches the one of the traversal access.%%
+    def iternext()
+      # (native code)
+    end
+    # Get forward matching keys.%%
+    # `<i>prefix</i>' specifies the prefix of the corresponding keys.%%
+    # `<i>max</i>' specifies the maximum number of keys to be fetched.  If it is not defined or negative, no limit is specified.%%
+    # The return value is a list object of the keys of the corresponding records.  This method does never fail.  It returns an empty list even if no record corresponds.%%
+    # Note that this method may be very slow because every key in the database is scanned.%%
+    def fwmkeys(prefix, max)
+      # (native code)
+    end
+    # Add an integer to a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # `<i>num</i>' specifies the additional value.%%
+    # If successful, the return value is the summation value, else, it is `nil'.%%
+    # If the corresponding record exists, the value is treated as an integer and is added to.  If no record corresponds, a new record of the additional value is stored.  Because records are stored in binary format, they should be processed with the `unpack' method with the `i' operator after retrieval.%%
+    def addint(key, num)
+      # (native code)
+    end
+    # Add a real number to a record.%%
+    # `<i>key</i>' specifies the key.%%
+    # `<i>num</i>' specifies the additional value.%%
+    # If successful, the return value is the summation value, else, it is `nil'.%%
+    # If the corresponding record exists, the value is treated as a real number and is added to.  If no record corresponds, a new record of the additional value is stored.  Because records are stored in binary format, they should be processed with the `unpack' method with the `d' operator after retrieval.%%
+    def adddouble(key, num)
+      # (native code)
+    end
+    # Synchronize updated contents with the file and the device.%%
+    # If successful, the return value is true, else, it is false.%%
+    # This method is useful when another process connects the same database file.%%
+    def sync()
+      # (native code)
+    end
+    # Optimize the storage.%%
+    # `<i>params</i>' specifies the string of the tuning parameters, which works as with the tuning of parameters the method `open'.  If it is not defined, it is not used.%%
+    # If successful, the return value is true, else, it is false.%%
+    def optimize(params)
+      # (native code)
+    end
+    # Remove all records.%%
+    # If successful, the return value is true, else, it is false.%%
+    def vanish()
+      # (native code)
+    end
+    # Copy the database file.%%
+    # `<i>path</i>' specifies the path of the destination file.  If it begins with `@', the trailing substring is executed as a command line.%%
+    # If successful, the return value is true, else, it is false.  False is returned if the executed command returns non-zero code.%%
+    # The database file is assured to be kept synchronized and not modified while the copying or executing operation is in progress.  So, this method is useful to create a backup file of the database file.%%
+    def copy(path)
+      # (native code)
+    end
+    # Begin the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # The database is locked by the thread while the transaction so that only one transaction can be activated with a database object at the same time.  Thus, the serializable isolation level is assumed if every database operation is performed in the transaction.  All updated regions are kept track of by write ahead logging while the transaction.  If the database is closed during transaction, the transaction is aborted implicitly.%%
+    def tranbegin()
+      # (native code)
+    end
+    # Commit the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Update in the transaction is fixed when it is committed successfully.%%
+    def trancommit()
+      # (native code)
+    end
+    # Abort the transaction.%%
+    # If successful, the return value is true, else, it is false.%%
+    # Update in the transaction is discarded when it is aborted.  The state of the database is rollbacked to before transaction.%%
+    def tranabort()
+      # (native code)
+    end
+    # Get the path of the database file.%%
+    # The return value is the path of the database file or `nil' if the object does not connect to any database instance.  "*" stands for on-memory hash database.  "+" stands for on-memory tree database.%%
+    def path()
+      # (native code)
+    end
+    # Get the number of records.%%
+    # The return value is the number of records or 0 if the object does not connect to any database instance.%%
+    def rnum()
+      # (native code)
+    end
+    # Get the size of the database.%%
+    # The return value is the size of the database or 0 if the object does not connect to any database instance.%%
+    def size()
+      # (native code)
+    end
+    # Call a versatile function for miscellaneous operations.%%
+    # `<i>name</i>' specifies the name of the function.%%
+    # `<i>args</i>' specifies an array of arguments.  If it is not defined, no argument is specified.%%
+    # If successful, the return value is an array of the result.  `nil' is returned on failure.%%
+    def misc(name, args)
       # (native code)
     end
   end
