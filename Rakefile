@@ -11,7 +11,6 @@ Echoe.new('tokyocabinet') do |gem|
   gem.extension_pattern = "extconf.rb"
   gem.certificate_chain = []
   gem.private_key = nil
-  gem.clean_pattern = ["pkg"]
   gem.rdoc_pattern = ["*.rb", "example/*.rb"]
   gem.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Tokyocabinet", "--main", "tokyocabinet-doc.rb"]
 end
