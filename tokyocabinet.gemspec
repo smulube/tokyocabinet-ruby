@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["test.rb", "tcbtest.rb", "tcttest.rb", "extconf.rb", "tokyocabinet-doc.rb", "tcatest.rb", "tchtest.rb", "tcftest.rb", "example/tcfdbex.rb", "example/tcadbex.rb", "example/tchdbex.rb", "example/tctdbex.rb", "example/tcbdbex.rb", "memsize.rb"]
   s.files = ["test.rb", "tcbtest.rb", "COPYING", "tcttest.rb", "tokyocabinet.c", "extconf.rb", "tokyocabinet-doc.rb", "package.sh", "overview.rd", "MANIFEST", "makedoc.sh", "tcatest.rb", "tchtest.rb", "tcftest.rb", "example/tcfdbex.rb", "example/tcadbex.rb", "example/tchdbex.rb", "example/tctdbex.rb", "example/tcbdbex.rb", "Rakefile", "tokyocabinet.gemspec", "memsize.rb"]
   s.homepage = %q{http://tokyocabinet.sourceforge.net/}
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Tokyocabinet"]
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Tokyocabinet", "--main", "tokyocabinet-doc.rb"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{tokyocabinet}
   s.rubygems_version = %q{1.3.3}
